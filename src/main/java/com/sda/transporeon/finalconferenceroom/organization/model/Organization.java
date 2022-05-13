@@ -14,7 +14,7 @@ import java.util.List;
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int organizationId;
+    private Integer organizationId;
     private String name;
     @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE)
     private List<ConferenceRoom> conferenceRooms = new ArrayList<>();
