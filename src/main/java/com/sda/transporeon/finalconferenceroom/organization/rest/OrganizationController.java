@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin("http://localhost:4200/")
@@ -22,7 +21,6 @@ public class OrganizationController {
     public OrganizationController(OrganizationService organizationService) {
         this.organizationService = organizationService;
     }
-
 
     @PostMapping
     public ResponseEntity<OrganizationDto> addOrganization(@RequestBody final OrganizationRequest organizationRequest) {
@@ -39,9 +37,9 @@ public class OrganizationController {
         return ResponseEntity.status(HttpStatus.OK).body(organizationService.removeOrganization(organizationName));
     }
 
-    @PutMapping
-    public ResponseEntity<OrganizationDto> updateOrganization(@RequestBody OrganizationRequest organizationRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(organizationService.updateOrganization(organizationRequest));
+    @PutMapping("/{organizationName}")
+    public ResponseEntity<OrganizationDto> updateOrganization(@PathVariable String organizationName, @RequestBody OrganizationRequest organizationRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(organizationService.updateOrganization(organizationName, organizationRequest));
     }
 
 }

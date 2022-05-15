@@ -27,9 +27,19 @@ public class ConferenceRoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(conferenceRoomService.addConferenceRoom(conferenceRoomRequest));
     }
 
-    @GetMapping("{organizationName}")
+    @GetMapping("/{organizationName}")
     public ResponseEntity<List<ConferenceRoomDto>> getAllRoomsByOrganization(@PathVariable String organizationName) {
         return ResponseEntity.status(HttpStatus.CREATED).body(conferenceRoomService.getAllRoomsByOrganization(organizationName));
+    }
+
+    @DeleteMapping("/{roomName}")
+    public ResponseEntity<ConferenceRoomDto> removeConferenceRoom(@PathVariable String roomName) {
+        return ResponseEntity.status(HttpStatus.OK).body(conferenceRoomService.removeConferenceRoom(roomName));
+    }
+
+    @PutMapping("/{roomName}")
+    public ResponseEntity<ConferenceRoomDto> updateConferenceRoom(@PathVariable String roomName, @RequestBody ConferenceRoomRequest conferenceRoomRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(conferenceRoomService.updateConferenceRoom(roomName, conferenceRoomRequest));
     }
 
 }

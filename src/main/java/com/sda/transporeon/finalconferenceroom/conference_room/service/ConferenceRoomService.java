@@ -18,7 +18,6 @@ public class ConferenceRoomService {
 
     private final ConferenceRoomRepository conferenceRoomRepository;
     private final ConferenceRoomTransformer conferenceRoomTransformer;
-
     private final OrganizationRepository organizationRepository;
 
     @Autowired
@@ -41,9 +40,46 @@ public class ConferenceRoomService {
         return conferenceRoomTransformer.entityToDto(conferenceRoomRepository.save(conferenceRoom));
     }
 
-    public List<ConferenceRoomDto> getAllRoomsByOrganization(String name) {
-        return conferenceRoomRepository.findByOrganization_Name(name).stream()
+    public List<ConferenceRoomDto> getAllRoomsByOrganization(String organizationName) {
+        return conferenceRoomRepository.findByOrganization_Name(organizationName).stream()
                 .map(conferenceRoomTransformer::entityToDto)
                 .collect(Collectors.toList());
     }
+
+    public ConferenceRoomDto removeConferenceRoom(String roomName) {
+        ConferenceRoom conferenceRoom = conferenceRoomRepository.findByRoomName(roomName).orElseThrow(() -> {
+            throw new NoSuchElementException();
+        });
+        conferenceRoomRepository.delete(conferenceRoom);
+        return conferenceRoomTransformer.entityToDto(conferenceRoom);
+    }
+
+    public ConferenceRoomDto updateConferenceRoom(String roomName, ConferenceRoomRequest conferenceRoomRequest) {
+        ConferenceRoom conferenceRoom = conferenceRoomRepository.findByRoomName(roomName).orElseThrow(() -> {
+            throw new NoSuchElementException();
+        });
+        if (conferenceRoomRequest.getConferenceRoomName() != null) {
+            conferenceRoomRepository.findByRoomName(conferenceRoomRequest.getConferenceRoomName()).ifPresent(room -> {
+                throw new IllegalArgumentException();
+            });
+            conferenceRoom.setRoomName(conferenceRoomRequest.getConferenceRoomName());
+        }
+        if (conferenceRoomRequest.getOrganizationName() != null) {
+            Organization organization = organizationRepository.findByName(conferenceRoomRequest.getOrganizationName()).orElseThrow(() -> {
+                throw new NoSuchElementException();
+            });
+            conferenceRoom.setOrganization(organization);
+        }
+        if (conferenceRoomRequest.getLevel() != null) {
+            conferenceRoom.setLevel(conferenceRoomRequest.getLevel());
+        }
+        if (conferenceRoomRequest.getSittingPlaces() != null) {
+            conferenceRoom.setSittingPlaces(conferenceRoomRequest.getSittingPlaces());
+        }
+        if (conferenceRoomRequest.getStandingPlaces() != null) {
+            conferenceRoom.setStandingPlaces(conferenceRoomRequest.getStandingPlaces());
+        }
+        return conferenceRoomTransformer.entityToDto(conferenceRoomRepository.save(conferenceRoom));
+    }
+
 }

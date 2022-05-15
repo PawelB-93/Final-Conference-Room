@@ -39,21 +39,17 @@ public class OrganizationService {
         return organizationTransformer.entityToDto(organization);
     }
 
-    public OrganizationDto updateOrganization(OrganizationRequest organizationRequest) {
-        Organization organization = organizationRepository.findByName(organizationRequest.getOrganizationName()).orElseThrow(() -> {
+    public OrganizationDto updateOrganization(String organizationName, OrganizationRequest organizationRequest) {
+        Organization organization = organizationRepository.findByName(organizationName).orElseThrow(() -> {
             throw new NoSuchElementException();
         });
         if (organizationRequest.getOrganizationName() != null) {
+            organizationRepository.findByName(organizationRequest.getOrganizationName()).ifPresent(org -> {
+                throw new IllegalArgumentException();
+            });
             organization.setName(organizationRequest.getOrganizationName());
         }
         return organizationTransformer.entityToDto(organizationRepository.save(organization));
-    }
-
-    public OrganizationDto getOrganizationByName(String name) {
-        Organization organization = organizationRepository.findByName(name).orElseThrow(() -> {
-            throw new NoSuchElementException();
-        });
-        return organizationTransformer.entityToDto(organization);
     }
 
     public List<OrganizationDto> getAllOrganizations() {
