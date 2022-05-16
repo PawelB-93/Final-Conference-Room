@@ -23,52 +23,6 @@ public class OrganizationService {
         this.organizationMapper = organizationMapper;
     }
 
-    //    //TODO
-//    public List<OrganizationDto> getAllOrganizations() {
-//        return organizationRepository.findAll().stream().map(organizationMapper::toDto).collect(Collectors.toList());
-//    }
-//
-//    //TODO
-//    public OrganizationDto getOrganizationById(Integer id) {
-//        Organization organization = organizationRepository.findById(id).orElseThrow(() -> {
-//            throw new NoSuchElementException();
-//        });
-//        return organizationMapper.toDto(organization);
-//    }
-//
-//    //TODO
-//    public OrganizationDto addOrganization(OrganizationDto organizationDto) {
-//        Organization organization = organizationMapper.toEntity(organizationDto);
-//        organizationRepository.findByOrganizationName(organizationDto.getOrganizationName()).ifPresent(org -> {
-//            throw new IllegalArgumentException();
-//        });
-//        return organizationMapper.toDto(organizationRepository.save(organization));
-//    }
-//
-//    //TODO
-//    public void deleteOrganizationById(Integer id) {
-//        Organization organization = organizationRepository.findById(id).orElseThrow(() -> {
-//            throw new NoSuchElementException();
-//        });
-//        organizationRepository.delete(organization);
-//    }
-//
-//    //TODO
-//    public OrganizationDto updateOrganizationById(OrganizationDto organizationDto) {
-//        Organization organization = organizationRepository.findById(organizationDto.getOrganizationId()).orElseThrow(() -> {
-//            throw new NoSuchElementException();
-//        });
-//        organizationRepository.findByOrganizationName(organizationDto.getOrganizationName()).ifPresent(org -> {
-//            throw new IllegalArgumentException();
-//        });
-//        if (organizationDto.getOrganizationName() != null) {
-//            organizationRepository.findByOrganizationName(organizationDto.getOrganizationName()).ifPresent(org -> {
-//                throw new IllegalArgumentException();
-//            });
-//            organization.setOrganizationName(organizationDto.getOrganizationName());
-//        }
-//        return organizationMapper.toDto(organizationRepository.save(organization));
-//    }
     public OrganizationDto addOrganization(OrganizationRequest organizationRequest) {
         Organization organization = organizationMapper.toEntity(organizationRequest);
         organizationRepository.findByOrganizationName(organization.getOrganizationName()).ifPresent(org -> {
